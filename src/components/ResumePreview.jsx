@@ -14,6 +14,9 @@ const ResumePreview = ({ resumeData, darkMode }) => {
       .map((skill) => skill.trim())
       .filter(Boolean);
   })();
+  console.log("resumeData.skills:", resumeData.skills);
+  console.log("skillsArray:", skillsArray);
+  console.log("Preview Skills:", resumeData.skills);
 
   const hasSummary = resumeData.summary && resumeData.summary.trim().length > 0;
 
@@ -52,16 +55,7 @@ const ResumePreview = ({ resumeData, darkMode }) => {
     let heightLeft = imgHeight;
     let position = 0;
 
-    pdf.addImage(
-      imgData,
-      "PNG",
-      "JPG",
-      ".DOC",
-      0,
-      position,
-      imgWidth,
-      imgHeight,
-    );
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
 
     heightLeft -= pdfHeight;
 
@@ -134,7 +128,7 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasSummary && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black-600 mb-2">
+            <h3 className="text-lg font-bold uppercase text-black mb-2">
               Summary
             </h3>
 
@@ -146,7 +140,7 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasSkills && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black-600 mb-2">
+            <h3 className="text-lg font-bold uppercase text-black mb-2">
               Skills
             </h3>
 
@@ -156,7 +150,7 @@ const ResumePreview = ({ resumeData, darkMode }) => {
               {skillsArray.map((skill, i) => (
                 <span
                   key={i}
-                  className="px-4 py-2 bg-black-600 text-white rounded-full text-sm"
+                  className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm"
                 >
                   {skill}
                 </span>
@@ -167,43 +161,54 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasEducation && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black-600 mb-2">
+            <h3 className="text-lg font-bold uppercase text-black mb-2">
               Education
             </h3>
 
             <div className="border-b border-gray-300 mb-3"></div>
 
-            <p>{resumeData.education}</p>
+            <div className="space-y-2 break-words">
+              {(resumeData.education || "").split(",").map((item, index) => (
+                <p key={index}>{item.trim()}</p>
+              ))}
+            </div>
           </div>
         )}
 
         {hasExperience && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black-600 mb-2">
+            <h3 className="text-lg font-bold uppercase text-black mb-2">
               Experience
             </h3>
 
             <div className="border-b border-gray-300 mb-3"></div>
 
-            <p>{resumeData.experience}</p>
+            <ul className="list-disc pl-5 space-y-2 break-words">
+              {(resumeData.experience || "").split(",").map((item, index) => (
+                <li key={index}>{item.trim()}</li>
+              ))}
+            </ul>
           </div>
         )}
-
         {hasProjects && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black-600 mb-2">
+            <h3 className="text-lg font-bold uppercase text-black mb-2">
               Projects
             </h3>
 
             <div className="border-b border-gray-300 mb-3"></div>
 
-            <p>{resumeData.projects}</p>
+            <ul className="list-disc pl-5 space-y-2 break-words">
+              {(resumeData.projects || "").split(",").map((item, index) => (
+                <li key={index}>{item.trim()}</li>
+              ))}
+            </ul>
           </div>
         )}
 
         {resumeData.customSections?.map((section, index) => (
           <div key={index} className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black-600 mb-2">
+            <h3 className="text-lg font-bold uppercase text-black mb-2">
               {section.title}
             </h3>
 

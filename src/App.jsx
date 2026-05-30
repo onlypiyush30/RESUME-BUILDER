@@ -39,8 +39,8 @@ function App() {
     <div
       className={`min-h-screen transition-all duration-500 ${
         darkMode
-          ? "b-g-gradient-to-br from-[#0f172a] via-[#111827] to-black text-white"
-          : "b-g-gradient-to-br from-gray-100 via-blue-50 to-indigo-100 text-black"
+          ? "bg-gradient-to-br from-[#0f172a] via-[#111827] to-black text-white"
+          : "bg-gradient-to-br from-gray-100 via-blue-50 to-indigo-100 text-black"
       }`}
     >
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
