@@ -128,10 +128,14 @@ const ResumeForm = ({
       />
       <textarea
         placeholder="Skills (React, JavaScript, Tailwind)"
+        className={`w-full border p-3 rounded-lg mb-4 placeholder:text-gray-400 ${
+          darkMode
+            ? "bg-black text-white border-gray-700"
+            : "bg-white text-black"
+        }`}
+        rows="4"
         value={resumeData.skills}
         onChange={(e) => {
-          console.log("Skills Input:", e.target.value);
-
           setResumeData({
             ...resumeData,
             skills: e.target.value,

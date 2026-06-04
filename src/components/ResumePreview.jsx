@@ -37,14 +37,19 @@ const ResumePreview = ({ resumeData, darkMode }) => {
     if (!input) return;
 
     const canvas = await html2canvas(input, {
-      scale: 2,
+      scale: 3,
       useCORS: true,
-      backgroundColor: darkMode ? "#111827" : "#ffffff",
+      backgroundColor: "#ffffff",
+      scrollY: -window.scrollY,
     });
 
-    const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-    const pdf = new jsPDF("p", "mm", "a4");
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
 
     const pdfWidth = 210;
     const pdfHeight = 297;
@@ -52,21 +57,25 @@ const ResumePreview = ({ resumeData, darkMode }) => {
     const imgWidth = pdfWidth;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let heightLeft = imgHeight;
-    let position = 0;
+    if (imgHeight <= pdfHeight) {
+      pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+    } else {
+      let heightLeft = imgHeight;
+      let position = 0;
 
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-
-    heightLeft -= pdfHeight;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-
-      pdf.addPage();
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
 
       heightLeft -= pdfHeight;
+
+      while (heightLeft > 0) {
+        position = -(imgHeight - heightLeft);
+
+        pdf.addPage();
+
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+
+        heightLeft -= pdfHeight;
+      }
     }
 
     pdf.save("resume.pdf");
@@ -76,7 +85,12 @@ const ResumePreview = ({ resumeData, darkMode }) => {
     <>
       <div
         id="resume-preview"
-        className={`p-10 rounded-3xl shadow-2xl border min-h-screen transition-all duration-500 ${
+        style={{
+          width: "794px",
+          minHeight: "1123px",
+          margin: "0 auto",
+        }}
+        className={`p-10 rounded-3xl shadow-2xl border transition-all duration-500 ${
           darkMode
             ? "bg-gray-900 text-white border-gray-700"
             : "bg-white text-black border-gray-300"
@@ -97,11 +111,19 @@ const ResumePreview = ({ resumeData, darkMode }) => {
               {resumeData.name || "Your Name"}
             </h1>
 
-            <h2 className="text-xl text-black-500 font-semibold mt-1">
+            <h2
+              className={`text-xl font-semibold mt-1 ${
+                darkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               {resumeData.role || "Frontend Developer"}
             </h2>
 
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-gray-600">
+            <div
+              className={`flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
               <span>{resumeData.phone || "Phone Number"}</span>
 
               <span>•</span>
@@ -128,7 +150,11 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasSummary && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black mb-2">
+            <h3
+              className={`text-lg font-bold uppercase mb-2 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               Summary
             </h3>
 
@@ -140,7 +166,11 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasSkills && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black mb-2">
+            <h3
+              className={`text-lg font-bold uppercase mb-2 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               Skills
             </h3>
 
@@ -161,7 +191,11 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasEducation && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black mb-2">
+            <h3
+              className={`text-lg font-bold uppercase mb-2 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               Education
             </h3>
 
@@ -177,7 +211,11 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {hasExperience && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black mb-2">
+            <h3
+              className={`text-lg font-bold uppercase mb-2 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               Experience
             </h3>
 
@@ -192,7 +230,11 @@ const ResumePreview = ({ resumeData, darkMode }) => {
         )}
         {hasProjects && (
           <div className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black mb-2">
+            <h3
+              className={`text-lg font-bold uppercase mb-2 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               Projects
             </h3>
 
@@ -208,7 +250,11 @@ const ResumePreview = ({ resumeData, darkMode }) => {
 
         {resumeData.customSections?.map((section, index) => (
           <div key={index} className="mt-6">
-            <h3 className="text-lg font-bold uppercase text-black mb-2">
+            <h3
+              className={`text-lg font-bold uppercase mb-2 ${
+                darkMode ? "text-white" : "text-black"
+              }`}
+            >
               {section.title}
             </h3>
 

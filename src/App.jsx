@@ -57,9 +57,7 @@ function App() {
           </div>
 
           <div className="sticky top-10">
-            <div className="backdrop-blur-xl bg-white/70 dark:bg-white/5 border border-white/20 shadow-2xl rounded-3xl p-6">
-              <ResumePreview resumeData={resumeData} darkMode={darkMode} />
-            </div>
+            <ResumePreview resumeData={resumeData} darkMode={darkMode} />
           </div>
         </div>
       </div>
